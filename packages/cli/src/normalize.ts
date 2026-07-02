@@ -20,14 +20,41 @@ export function mapKind(hookKind: string): AiEvent["kind"] {
   return (VALID_KINDS.has(hookKind) ? hookKind : "agent_message") as AiEvent["kind"];
 }
 
+const FILE_WRITE_TOOLS = new Set(["Write", "Edit", "MultiEdit", "NotebookEdit", "Create", "Update"]);
+const FILE_READ_TOOLS = new Set(["Read", "NotebookRead"]);
+const TEST_CMD = /\b(jest|vitest|mocha|pytest|go test|cargo test|(?:npm|pnpm|yarn)\s+(?:run\s+)?test)\b/i;
+
+// Refine a completed tool cycle (PostToolUse → tool_call_end) into the semantic
+// canonical kind based on which tool ran, so the audit trail records "a file
+// changed" / "a command ran" / "tests ran" rather than a generic tool call.
+// PreToolUse stays tool_call_start (the intent). Unknown tools stay tool_call_end.
+function asString(value: unknown): string {
+  return typeof value === "string" ? value : "";
+}
+
+export function deriveKind(hookKind: string, hook: Record<string, unknown>): AiEvent["kind"] {
+  if (hookKind === "tool_call_end") {
+    const tool = asString(hook.tool_name);
+    if (FILE_WRITE_TOOLS.has(tool)) return "file_change";
+    if (FILE_READ_TOOLS.has(tool)) return "file_read";
+    if (tool === "Bash") {
+      const input = hook.tool_input as Record<string, unknown> | undefined;
+      const cmd = asString(input?.command);
+      return TEST_CMD.test(cmd) ? "test_result" : "command_run";
+    }
+  }
+  return mapKind(hookKind);
+}
+
 export function normalize(line: SpoolLine): AppendInput {
+  const kind = deriveKind(line.kind, line.hook ?? {});
   const { payload, redactions } = redactPayload(line.hook ?? {});
   return {
     id: randomUUID(),
     sessionId: line.sessionId,
     ts: line.ts,
     source: "hook",
-    kind: mapKind(line.kind),
+    kind,
     payload,
     redactions,
   };

@@ -45,9 +45,12 @@ scratch project, run a real one-prompt session that reads and writes a file, the
 1. **Session-id key** — is it `session_id` on every hook payload? (spooler: `packages/hook/src/spool.ts`)
 2. **Payload shape per event** — capture one real payload of each of the 8 events; confirm the
    keys we surface (`tool_name`, `tool_input`, `prompt`, etc.) exist.
-3. **file_change / command_run / test_result** — these canonical kinds are NOT emitted yet;
-   the skeleton records generic `tool_call_start`/`tool_call_end`. V1 derives the finer kinds
-   from `PostToolUse` `tool_name` (Write/Edit → file_change, Bash → command_run, etc.).
+3. **file_change / command_run / test_result** — NOW DERIVED (`deriveKind` in
+   `packages/cli/src/normalize.ts`): a completed tool cycle (`tool_call_end`) is refined by
+   `tool_name` — Write/Edit/MultiEdit/NotebookEdit/Create/Update → `file_change`,
+   Read/NotebookRead → `file_read`, Bash → `test_result` when the command matches a test
+   runner else `command_run`. This still depends on the real payload exposing `tool_name`
+   (and `tool_input.command` for Bash) — confirm those keys against a live session.
 4. **Coverage ≥ ~90%** of meaningful terminal actions. If below, fix `hooks.json` + `mapKind`
    before building anything downstream.
 
