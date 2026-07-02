@@ -7,6 +7,7 @@ import { dbPath, spoolDir } from "./paths.js";
 import { ingestAll } from "./collector.js";
 import { statusReport, dumpSession } from "./commands/report.js";
 import { writeInit } from "./commands/init.js";
+import { exportSession, type ExportFormat } from "./commands/export.js";
 import { startUi } from "./ui/server.js";
 
 function openStore(): AuditStore {
@@ -45,10 +46,18 @@ program.command("verify").description("recompute the hash chain")
     if (!r.ok) process.exitCode = 1;
   });
 
-program.command("export").description("export a session report (MD/JSON)")
-  .action(() => {
-    // V1: render Markdown (summary, timeline, redaction appendix, methodology) + JSON + Mermaid graph.
-    console.log("export: not yet implemented (V1). Use `dump` for now.");
+program.command("export").description("export a session report (Markdown or JSON, with an embedded Mermaid graph)")
+  .option("--session <id>", "session id (defaults to latest)")
+  .option("--format <fmt>", "md | json", "md")
+  .option("--out <dir>", "output directory", process.cwd())
+  .action((opts: { session?: string; format: string; out: string }) => {
+    const s = openStore();
+    const sid = opts.session ?? s.listSessions()[0]?.sessionId;
+    if (!sid) { console.log("(no sessions recorded)"); s.close(); return; }
+    const format: ExportFormat = opts.format === "json" ? "json" : "md";
+    const file = exportSession(s, sid, format, opts.out);
+    s.close();
+    console.log(`Exported ${sid} → ${file}`);
   });
 
 program.command("ui").description("serve the local dashboard")

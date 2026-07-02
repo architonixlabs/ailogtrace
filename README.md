@@ -4,8 +4,8 @@
 for Claude Code — records every prompt, tool call, and file change into an append-only,
 hash-chained local store, with secrets redacted before they are ever written.
 
-> Status: **MVP walking skeleton.** The capture spine works end-to-end; graph, dashboard,
-> reports, and inference are intentionally minimal stubs (see
+> Status: **MVP walking skeleton.** The capture spine and Markdown/JSON report export work
+> end-to-end; the graph builder, dashboard, and inference are intentionally minimal stubs (see
 > [the design spec](docs/superpowers/specs/2026-07-02-ailogtrace-mvp-skeleton-design.md)).
 
 ## Architecture
@@ -63,7 +63,8 @@ Node.js 22+ (uses the built-in `node:sqlite`), pnpm.
 
 ## Deferred to V1
 
-LLM decision inference, risk scoring, diff viewer, React Flow graph, PDF/HTML export,
-encryption-at-rest, `.ailogtraceignore`, FTS search, second-agent adapters. See the
+LLM decision inference, risk scoring, diff viewer, React Flow graph, PDF/HTML export
+(Markdown/JSON export already works), encryption-at-rest, `.ailogtraceignore`, FTS search,
+second-agent adapters. See the
 [design spec](docs/superpowers/specs/2026-07-02-ailogtrace-mvp-skeleton-design.md) §11 and the
 `// V1:` markers in the source.
