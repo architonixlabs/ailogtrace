@@ -1,0 +1,7 @@
+{
+  "name": "@ailogtrace/hook",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": { "ailogtrace-hook": "dist/index.js" },
+  "scripts": { "build": "tsc -b", "test": "vitest run" }
+}

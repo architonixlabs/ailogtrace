@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "SessionStart": [{ "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/packages/hook/dist/index.js\" session_start" }] }],
+    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/packages/hook/dist/index.js\" user_prompt" }] }],
+    "PreToolUse": [{ "matcher": "*", "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/packages/hook/dist/index.js\" tool_call_start" }] }],
+    "PostToolUse": [{ "matcher": "*", "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/packages/hook/dist/index.js\" tool_call_end" }] }],
+    "Notification": [{ "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/packages/hook/dist/index.js\" permission_request" }] }],
+    "SubagentStop": [{ "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/packages/hook/dist/index.js\" subagent_stop" }] }],
+    "Stop": [{ "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/packages/hook/dist/index.js\" final_output" }] }],
+    "SessionEnd": [{ "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/packages/hook/dist/index.js\" session_end" }] }]
+  }
+}
