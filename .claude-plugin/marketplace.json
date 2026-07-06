@@ -1,0 +1,14 @@
+{
+  "name": "ailogtrace",
+  "owner": {
+    "name": "Architonix Labs",
+    "url": "https://github.com/architonixlabs"
+  },
+  "plugins": [
+    {
+      "name": "ai-log-trace",
+      "source": "./",
+      "description": "Flight recorder for AI-assisted development — local-first audit and workflow-trace capture for Claude Code. Records prompts, tool calls, and file changes into an append-only, hash-chained local store with secrets redacted before they are written."
+    }
+  ]
+}

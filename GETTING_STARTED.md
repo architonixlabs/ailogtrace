@@ -29,11 +29,13 @@ So: **ready to try, not yet ready to depend on.** Treat this first run as the ac
 
 ---
 
-## 1. Install and build
+## 1. Install from git and build
 
-From the plugin repo root (`ai-log-trace/`):
+Clone the repo and build it:
 
 ```bash
+git clone https://github.com/architonixlabs/ailogtrace.git
+cd ailogtrace
 pnpm install
 pnpm -r build
 pnpm -r test        # optional: expect 33 passing
@@ -41,6 +43,11 @@ pnpm -r test        # optional: expect 33 passing
 
 This produces the runnable artifacts the hooks call (`packages/hook/dist/index.js`,
 `packages/cli/dist/cli.js`, `apps/dashboard/dist/`).
+
+> **Prefer a one-command plugin install?** See
+> [Install as a Claude Code plugin](#alternative-install-as-a-claude-code-plugin) below. That route
+> gets you *capture* with no clone/build, but the `ailogtrace` CLI and dashboard (which have real
+> dependencies) still need this clone+build. For the full experience, do this step.
 
 > Windows note: paths below use forward slashes; PowerShell accepts them. If you copy the repo
 > elsewhere, re-run `ailogtrace init` (step 2) so the hook paths point at the new location.
@@ -78,10 +85,39 @@ events, each pointing at the built spooler with an absolute path. It's idempoten
 any existing settings. (`.claude/settings.local.json` is normally git-ignored, so this stays local
 to you.)
 
-> **Alternative — install as a Claude Code plugin.** This repo already ships a
-> `.claude-plugin/plugin.json` and `hooks/hooks.json` (using `${CLAUDE_PLUGIN_ROOT}`). If you load
-> it through a Claude Code plugin marketplace/local-plugin mechanism, the hooks register globally
-> without per-project `init`. For a first test, `init` is simpler and more predictable.
+---
+
+## Alternative: install as a Claude Code plugin
+
+Instead of per-project `init`, you can install AILogTrace as a Claude Code plugin straight from
+GitHub. The repo ships a marketplace manifest (`.claude-plugin/marketplace.json`) and the
+**dependency-free compiled hook** (`packages/hook/dist/`), so the capture hooks work with **no
+clone and no build**:
+
+```bash
+# inside Claude Code:
+/plugin marketplace add architonixlabs/ailogtrace
+/plugin install ai-log-trace@ailogtrace
+```
+
+```bash
+# ...or non-interactively from a shell:
+claude plugin marketplace add architonixlabs/ailogtrace
+claude plugin install ai-log-trace@ailogtrace
+```
+
+Then **restart Claude Code**. Hooks register globally (all projects) via `${CLAUDE_PLUGIN_ROOT}`,
+and sessions record to `~/.ailogtrace/`.
+
+**Important caveat.** Claude Code *copies* a plugin on install — it does **not** run `pnpm install`
+or build it. The hook is dependency-free so capture works, but the `ailogtrace` **CLI and dashboard
+have real dependencies** and are **not** available from the plugin install. To inspect your
+recorded sessions (`dump`, `verify`, `export`, `ui`), do the clone + build in
+[step 1](#1-install-from-git-and-build) and run the CLI from there — it reads the same
+`~/.ailogtrace/` store the plugin writes to.
+
+For a first test, per-project `init` (above) is the simplest fully-featured path; the plugin route
+is best once you want capture on across every project without wiring each one.
 
 ---
 

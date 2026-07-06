@@ -11,6 +11,12 @@ build/
 *.tsbuildinfo
 .vite/
 
+# Exception: the hook is dependency-free (Node built-ins only). Its compiled
+# output is committed so the plugin's capture hooks run on `claude plugin install`
+# without a build step (Claude Code copies the repo, it does not build it).
+!packages/hook/dist/
+!packages/hook/dist/**
+
 # --- Logs & caches ---
 *.log
 npm-debug.log*

@@ -33,24 +33,45 @@ Nothing leaves the machine. The store lives at `~/.ailogtrace/audit.db`.
 | `@ailogtrace/cli`  | `ailogtrace` CLI: init/status/dump/verify/export/ui + collector |
 | `@ailogtrace/dashboard` | React + Vite local dashboard (session list, walking-skeleton stub) |
 
-## Quick start
+## Install from git
+
+Two ways to install from this repo. Full walkthrough in **[GETTING_STARTED.md](GETTING_STARTED.md)**.
+
+### Option A — clone + build (recommended: full CLI + dashboard)
 
 ```bash
+git clone https://github.com/architonixlabs/ailogtrace.git
+cd ailogtrace
 pnpm install
 pnpm -r build
-pnpm -r test          # 24 tests
+pnpm -r test          # optional: expect all green
 
-# wire hooks into a project (writes .claude/settings.local.json)
-node packages/cli/dist/cli.js init
-
-# after a Claude Code session runs, inspect it:
-node packages/cli/dist/cli.js status
-node packages/cli/dist/cli.js dump
-node packages/cli/dist/cli.js verify
-
-# local dashboard API (http://127.0.0.1:4477/api/sessions)
-node packages/cli/dist/cli.js ui
+# wire hooks into a project you use Claude Code in:
+cd /path/to/your/project
+node "/path/to/ailogtrace/packages/cli/dist/cli.js" init
+# restart Claude Code, work a session, then:
+node "/path/to/ailogtrace/packages/cli/dist/cli.js" dump
+node "/path/to/ailogtrace/packages/cli/dist/cli.js" ui      # http://127.0.0.1:4477
 ```
+
+### Option B — as a Claude Code plugin (capture-only, no build)
+
+The repo ships a plugin marketplace manifest and the dependency-free compiled hook, so the
+**capture** hooks work straight from git — no clone or build:
+
+```bash
+# inside Claude Code:
+/plugin marketplace add architonixlabs/ailogtrace
+/plugin install ai-log-trace@ailogtrace
+
+# or non-interactively:
+claude plugin marketplace add architonixlabs/ailogtrace
+claude plugin install ai-log-trace@ailogtrace
+```
+
+Restart Claude Code and your sessions record to `~/.ailogtrace/`. To *inspect* them (the
+`ailogtrace` CLI and dashboard have real dependencies), use Option A's clone+build. Details and the
+first-run acceptance check are in [GETTING_STARTED.md](GETTING_STARTED.md).
 
 ## Guarantees (this skeleton)
 
