@@ -2,6 +2,9 @@
   "name": "ailogtrace-monorepo",
   "private": true,
   "type": "module",
+  "description": "Flight recorder for AI-assisted development — local-first audit and workflow-trace capture for Claude Code.",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/architonixlabs/ailogtrace.git" },
   "engines": { "node": ">=22" },
   "scripts": {
     "build": "pnpm -r build",

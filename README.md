@@ -4,9 +4,13 @@
 for Claude Code — records every prompt, tool call, and file change into an append-only,
 hash-chained local store, with secrets redacted before they are ever written.
 
-> Status: **MVP walking skeleton.** The capture spine and Markdown/JSON report export work
-> end-to-end; the graph builder, dashboard, and inference are intentionally minimal stubs (see
+> Status: **MVP (0.1.x).** Capture, redaction, hash-chain verification, semantic kind derivation,
+> Markdown/JSON report export (with a Mermaid graph), and a timeline dashboard all work
+> end-to-end. LLM inference, risk scoring, and richer graph/diff views are deferred (see
 > [the design spec](docs/superpowers/specs/2026-07-02-ailogtrace-mvp-skeleton-design.md)).
+>
+> **New here?** Start with **[GETTING_STARTED.md](GETTING_STARTED.md)** — install, wire it into a
+> project, and run your first recorded session.
 
 ## Architecture
 
@@ -68,3 +72,19 @@ LLM decision inference, risk scoring, diff viewer, React Flow graph, PDF/HTML ex
 second-agent adapters. See the
 [design spec](docs/superpowers/specs/2026-07-02-ailogtrace-mvp-skeleton-design.md) §11 and the
 `// V1:` markers in the source.
+
+## Documentation
+
+- **[GETTING_STARTED.md](GETTING_STARTED.md)** — install, wire-up, first-run acceptance check
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** — dev setup and ground rules
+- **[SECURITY.md](SECURITY.md)** — reporting vulnerabilities, threat model, honest limits
+- **[docs/superpowers/](docs/superpowers/)** — design spec, implementation plan, hook mapping
+
+## Contributing & Security
+
+Contributions are welcome — please read [CONTRIBUTING.md](CONTRIBUTING.md) first. For security
+issues, follow [SECURITY.md](SECURITY.md) (report privately, not via public issues).
+
+## License
+
+[MIT](LICENSE) © 2026 Architonix Labs.

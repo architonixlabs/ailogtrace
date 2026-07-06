@@ -1,11 +1,38 @@
-
-
-#Ignore vscode AI rules
+# --- Editor / AI tooling ---
 .github\instructions\codacy.instructions.md
+.playwright-mcp/
+.vscode/
+.idea/
 
+# --- Node / build output ---
 node_modules/
 dist/
+build/
 *.tsbuildinfo
+.vite/
 
-.playwright-mcp/
+# --- Logs & caches ---
+*.log
+npm-debug.log*
+pnpm-debug.log*
+.eslintcache
+coverage/
+
+# --- Test/scratch artifacts ---
 *.png
+test-*.db
+*.db-shm
+*.db-wal
+
+# --- OS noise ---
+.DS_Store
+Thumbs.db
+
+# --- Local runtime data (AILogTrace stores audit data under the user's home,
+#     never in the repo — but ignore any stray local copies just in case) ---
+.ailogtrace/
+
+# --- Env / secrets ---
+.env
+.env.*
+!.env.example
