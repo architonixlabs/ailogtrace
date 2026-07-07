@@ -1,5 +1,5 @@
 {
   "name": "ai-log-trace",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Flight recorder for AI-assisted development — local-first audit and workflow-trace capture for Claude Code."
 }
