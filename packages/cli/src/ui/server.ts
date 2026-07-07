@@ -10,6 +10,7 @@ import { ingestAll } from "../collector.js";
 export function buildServer(store: AuditStore): FastifyInstance {
   const app = Fastify({ logger: false });
   app.get("/api/sessions", async () => store.listSessions());
+  app.get("/api/verify", async () => store.verify());
   app.get<{ Params: { id: string } }>("/api/sessions/:id/events", async (req) =>
     store.getEvents(req.params.id),
   );
